@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('partials/head') %>
+        <title>Withdraw Funds</title>
+        <style>
+            .withdraw-container {
+                max-width: 500px;
+                margin: 30px auto;
+                padding: 20px;
+                border-radius: 10px;
+                background-color: #2e2e2e;
+                /* Dark grey box */
+                color: white;
+            }
+
+            .balance-card {
+                background-color: #1e1e1e;
+                color: #ffffff;
+            }
+
+            .btn-submit {
+                background-color: #00b050;
+                /* Site green */
+                border: none;
+            }
+
+            .btn-submit:hover {
+                background-color: #019344;
+            }
+
+            .form-label,
+            .form-control,
+            .text-muted {
+                color: #ffffff;
+            }
+
+            input.form-control {
+                background-color: #3a3a3a;
+                border: 1px solid #555;
+                color: white;
+            }
+
+            input.form-control::placeholder {
+                color: #ccc;
+            }
+
+            .text-muted {
+                font-size: 0.8rem;
+            }
+
+            .card-title {
+                color: #ccc;
+            }
+        </style>
+</head>
+
+<body>
+    <%- include('partials/navbar') %>
+
+        <div class="container">
+            <div class="withdraw-container">
+                <h2 class="text-center mb-4">Withdraw Funds</h2>
+
+                <% if (error) { %>
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <%= error %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <% } %>
+
+                        <% if (success) { %>
+                            <div class="alert alert-success alert-dismissible fade show">
+                                <%= success %>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            <% } %>
+
+                                <form action="/withdraw" method="POST">
+                                    <div class="mb-3">
+                                        <label class="form-label">Amount</label>
+                                        <input type="number" class="form-control" name="amount" required min="1000"
+                                            step="100" placeholder="Enter amount">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">PIX Key</label>
+                                        <input type="text" class="form-control" name="pixKey" required
+                                            placeholder="Enter your PIX key">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Secret Withdrawal Code</label>
+                                        <input type="password" class="form-control" name="withdrawalId" required
+                                            pattern="[0-9]{8}" title="Enter the 8-digit admin code">
+                                        <small class="text-muted">Enter the 8-digit authorization code</small>
+                                    </div>
+
+                                    <div class="card mb-3 balance-card text-center">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-0">Current Balance</h5>
+                                            <p class="fs-4 fw-bold mb-0">
+                                                <%= currentBalance %>
+                                                    <%= currency %>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-submit w-100 mt-3">Submit Withdrawal
+                                        Request</button>
+                                </form>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+</body>
+
+</html>

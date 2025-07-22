@@ -1,0 +1,42 @@
+<h2>Withdrawal Requests</h2>
+
+<table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Amount</th>
+            <th>Currency</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% withdrawals.forEach(w=> { %>
+            <tr>
+                <td>
+                    <%= w.username %>
+                </td>
+                <td>
+                    <%= w.email %>
+                </td>
+                <td>
+                    <%= w.amount %>
+                </td>
+                <td>
+                    <%= w.currency || 'N/A' %>
+                </td>
+                <td>
+                    <%= w.status || 'Pending' %>
+                </td>
+                <td>
+                    <%= new Date(w.date).toLocaleString() %>
+                </td>
+            </tr>
+            <% }) %>
+    </tbody>
+</table>
+
+<br>
+
+<a href="/admin/dashboard">← Back to Dashboard</a>

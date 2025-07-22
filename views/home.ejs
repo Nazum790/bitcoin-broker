@@ -1,0 +1,148 @@
+<%- include('partials/head') %>
+    <%- include('partials/navbar') %>
+
+        <!-- Hero Section -->
+        <div class="hero-section text-center text-light d-flex align-items-center justify-content-center"
+            style="height: 90vh; position: relative; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1625491010036-cc1889cba74a?auto=format&fit=crop&w=1500&q=80') no-repeat center center; background-size: cover;">
+            <div>
+                <h1 class="mb-3 display-4 fw-bold text-light">
+                    Welcome to <span style="color: #00ffcc;">Trade With Thomas Roberto</span>
+                </h1>
+                <p class="lead mb-4">Fast, Secure & Trusted Bitcoin Transactions — Full Manual Control</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/register" class="btn btn-warning btn-lg mx-2">
+                        <i class="bi bi-person-plus-fill"></i> Register
+                    </a>
+                    <a href="/login" class="btn btn-outline-light btn-lg mx-2">
+                        <i class="bi bi-box-arrow-in-right"></i> Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Highlights Section -->
+        <div class="container mt-5">
+            <h2 class="text-center text-light mb-4">✨ Why Choose Us</h2>
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-light shadow"
+                        style="background-color: rgba(15, 15, 15, 0.75); border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="card-body">
+                            <div class="display-4 mb-3">🔐</div>
+                            <h5 class="card-title">Secure Platform</h5>
+                            <p class="card-text">All transactions are protected with advanced encryption and manual
+                                admin control.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-light shadow"
+                        style="background-color: rgba(15, 15, 15, 0.75); border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="card-body">
+                            <div class="display-4 mb-3">⚡</div>
+                            <h5 class="card-title">Lightning Speed</h5>
+                            <p class="card-text">Quick processing of deposits and withdrawals — no delays, no stress.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 text-light shadow"
+                        style="background-color: rgba(15, 15, 15, 0.75); border: 1px solid rgba(255,255,255,0.05);">
+                        <div class="card-body">
+                            <div class="display-4 mb-3">🌍</div>
+                            <h5 class="card-title">Global Access</h5>
+                            <p class="card-text">Available in Brazil, Portugal, South Africa and more. Built for your
+                                convenience.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Snapshot Section -->
+        <div class="container mt-5 p-4 rounded shadow"
+            style="background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+            <h4 class="text-center mb-4">📊 Market Snapshot</h4>
+            <div class="row text-center">
+                <div class="col-md-4">
+                    <h6>Bitcoin</h6>
+                    <p class="text-success">+1.2%</p>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 80%">80%</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h6>Ethereum</h6>
+                    <p class="text-danger">−0.5%</p>
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" style="width: 45%">45%</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h6>Litecoin</h6>
+                    <p class="text-success">+0.8%</p>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" style="width: 65%">65%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials Section -->
+        <div class="container mt-5">
+            <h4 class="text-center mb-4 text-white">💬 What Our Clients Say</h4>
+            <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="card mx-auto p-4 shadow-lg"
+                            style="max-width: 600px; background-color: #1f2a40; color: #f8f9fa;">
+                            <p class="mb-2">"Super fast and secure Bitcoin service. My go-to every time!"</p>
+                            <small class="text-muted">— João Mendes, Lisbon 🇵🇹</small>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card mx-auto p-4 shadow-lg"
+                            style="max-width: 600px; background-color: #1f2a40; color: #f8f9fa;">
+                            <p class="mb-2">"I appreciate the manual control. Always feel safe trading here."</p>
+                            <small class="text-muted">— Lerato Mokoena, Johannesburg 🇿🇦</small>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card mx-auto p-4 shadow-lg"
+                            style="max-width: 600px; background-color: #1f2a40; color: #f8f9fa;">
+                            <p class="mb-2">"Best crypto service in Brazil. Honest and quick response time."</p>
+                            <small class="text-muted">— Ana Carvalho, São Paulo 🇧🇷</small>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card mx-auto p-4 shadow-lg"
+                            style="max-width: 600px; background-color: #1f2a40; color: #f8f9fa;">
+                            <p class="mb-2">"Trustworthy team. I’ve referred many of my friends here."</p>
+                            <small class="text-muted">— Carlos Oliveira, Rio 🇧🇷</small>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="card mx-auto p-4 shadow-lg"
+                            style="max-width: 600px; background-color: #1f2a40; color: #f8f9fa;">
+                            <p class="mb-2">"Highly recommended for new traders. Smooth experience!"</p>
+                            <small class="text-muted">— Thandi Ndlovu, Cape Town 🇿🇦</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <a class="carousel-control-prev" href="#testimonialCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" style="filter: invert(1);" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#testimonialCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" style="filter: invert(1);" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>

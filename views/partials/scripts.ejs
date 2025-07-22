@@ -1,0 +1,70 @@
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Font Awesome Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+<!-- Custom Scripts -->
+<script>
+    // Initialize tooltips
+    $(function () {
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        $('[data-bs-toggle="popover"]').popover();
+    });
+
+    // Auto-dismiss alerts after 5 seconds
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('.alert').fadeOut('slow', function () {
+                $(this).remove();
+            });
+        }, 5000);
+    });
+
+    // Format currency values
+    function formatCurrency(amount) {
+        return parseFloat(amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
+    // Initialize any charts on the page
+         <% if (typeof chartData !== 'undefined') { %>
+    const ctx = document.getElementById('balanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: <% - JSON.stringify(chartData) %>,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return 'Balance: ' + formatCurrency(context.raw);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+<% } %>
+
+        // Handle AJAX requests
+        function submitWithdrawal(form) {
+            $.ajax({
+                type: "POST",
+                url: "/withdraw",
+                data: $(form).serialize(),
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr) {
+                    alert("Error: " + xhr.responseText);
+                }
+            });
+            return false;
+        }
+</script>
