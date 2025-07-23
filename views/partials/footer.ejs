@@ -12,6 +12,7 @@
 <!-- 🌍 Google Translate (Load LAST) -->
 <script>
     function googleTranslateElementInit() {
+        // Desktop translator
         new google.translate.TranslateElement(
             {
                 pageLanguage: 'en',
@@ -19,6 +20,16 @@
                 layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
             },
             'google_translate_element'
+        );
+
+        // Mobile translator inside hamburger menu
+        new google.translate.TranslateElement(
+            {
+                pageLanguage: 'en',
+                includedLanguages: 'en,pt,pt-BR,af,zu',
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+            },
+            'google_translate_element_mobile'
         );
     }
 </script>
