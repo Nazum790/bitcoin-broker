@@ -70,16 +70,40 @@
             color: #000;
         }
 
+        .card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        .card-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 0 15px rgba(0, 255, 204, 0.25);
-            transition: all 0.3s ease;
         }
 
         /* 🌍 Translator Style Fixes */
         #google_translate_element {
             font-size: 14px;
             z-index: 9999;
+            display: inline-block;
         }
 
         .goog-te-gadget {
@@ -90,6 +114,21 @@
             #google_translate_element {
                 text-align: center;
                 margin: auto;
+                display: block;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                padding: 12px 16px;
+            }
+
+            .card-title {
+                font-size: 1rem;
+            }
+
+            .card-text {
+                font-size: 0.9rem;
             }
         }
     </style>
