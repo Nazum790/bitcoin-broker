@@ -4,15 +4,14 @@
     </p>
 </footer>
 
-<!-- ✅ Bootstrap + jQuery (Full) + Popper (Always load these first and in this order) -->
+<!-- ✅ Bootstrap + jQuery + Popper -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 
-<!-- 🌍 Google Translate (Load LAST) -->
+<!-- 🌍 Google Translate (used in navbar only now) -->
 <script>
     function googleTranslateElementInit() {
-        // Desktop translator
         new google.translate.TranslateElement(
             {
                 pageLanguage: 'en',
@@ -20,16 +19,6 @@
                 layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
             },
             'google_translate_element'
-        );
-
-        // Mobile translator inside hamburger menu
-        new google.translate.TranslateElement(
-            {
-                pageLanguage: 'en',
-                includedLanguages: 'en,pt,pt-BR,af,zu',
-                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
-            },
-            'google_translate_element_mobile'
         );
     }
 </script>
