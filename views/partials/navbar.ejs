@@ -1,7 +1,8 @@
-<!-- 🌍 Language Translator (Visible on all devices) -->
-<div class="bg-dark text-light py-1 text-center">
+<!-- 🌍 Language Translator (Desktop Only) -->
+<div class="bg-dark text-light py-1 text-center d-none d-lg-block">
     <div id="google_translate_element" style="display: inline-block;"></div>
 </div>
+
 <!-- 🔧 Main Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
     <div class="container">
@@ -13,7 +14,7 @@
         </button>
 
         <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
@@ -23,7 +24,35 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/login"><i class="bi bi-box-arrow-in-right"></i> Login</a>
                 </li>
+
+                <!-- 🌍 Translator (Mobile Only) -->
+                <li class="nav-item d-lg-none mt-2 text-center">
+                    <div id="google_translate_element_mobile"></div>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
+
+<!-- 🧠 Translator Script Initialization for Both -->
+<script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+            {
+                pageLanguage: 'en',
+                includedLanguages: 'en,pt,pt-BR,af,zu',
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+            },
+            'google_translate_element'
+        );
+        new google.translate.TranslateElement(
+            {
+                pageLanguage: 'en',
+                includedLanguages: 'en,pt,pt-BR,af,zu',
+                layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+            },
+            'google_translate_element_mobile'
+        );
+    }
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
