@@ -24,7 +24,7 @@ router.get('/dashboard', requireAuth, async (req, res) => {
 
         res.render('dashboard', {
             username: user.username,
-            balance: user.balance.toFixed(2),
+            balance: user.balance,
             currency: user.currency,
             transactions: user.transactions || [],
             success: req.query.success,
@@ -44,7 +44,7 @@ router.get('/withdraw', requireAuth, async (req, res) => {
         res.render('withdraw', {
             error: req.query.error,
             success: req.query.success,
-            currentBalance: user.balance.toFixed(2),
+            currentBalance: user.balance,
             currency: user.currency
         });
     } catch (err) {
@@ -78,12 +78,13 @@ router.post('/withdraw', requireAuth, async (req, res) => {
             return res.redirect('/withdraw?error=Insufficient balance');
         }
 
-        // Deduct and record transaction
+        // Deduct and record transaction with currency included
         user.balance -= numericAmount;
 
         user.transactions.unshift({
             type: 'withdrawal',
             amount: numericAmount,
+            currency: user.currency, // ✅ Include currency per transaction
             status: 'pending',
             date: new Date(),
             pixKey: pixKey

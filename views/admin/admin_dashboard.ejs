@@ -95,7 +95,9 @@
                     <%= user.username %>
                 </td>
                 <td>
-                    <%= typeof user.balance==='number' ? user.balance.toFixed(2) : '0.00' %>
+                    <%= user.currency %>
+                        <%= new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2
+                            }).format(user.balance || 0) %>
                 </td>
                 <td>
                     <%= user.currency || 'N/A' %>

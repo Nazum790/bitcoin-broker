@@ -99,8 +99,9 @@
                                         <div class="card-body">
                                             <h5 class="card-title mb-0">Current Balance</h5>
                                             <p class="fs-4 fw-bold mb-0">
-                                                <%= currentBalance %>
-                                                    <%= currency %>
+                                                <%= currency %>
+                                                    <%= new Intl.NumberFormat('en-US', { minimumFractionDigits: 2,
+                                                        maximumFractionDigits: 2 }).format(currentBalance) %>
                                             </p>
                                         </div>
                                     </div>

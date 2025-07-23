@@ -21,7 +21,9 @@
                     <%= w.email %>
                 </td>
                 <td>
-                    <%= w.amount %>
+                    <%= w.currency || '' %>
+                        <%= new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2
+                            }).format(w.amount || 0) %>
                 </td>
                 <td>
                     <%= w.currency || 'N/A' %>
