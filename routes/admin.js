@@ -125,11 +125,11 @@ router.post('/withdrawals/:id/approve', isAdmin, async (req, res) => {
             return res.redirect('/admin/withdrawals?error=Transaction not found');
         }
 
-        if (transaction.status === 'Approved') {
+        if (transaction.status === 'approved') {
             return res.redirect('/admin/withdrawals?error=Already approved');
         }
 
-        transaction.status = 'Approved';
+        transaction.status = 'approved';
         await user.save();
 
         res.redirect('/admin/withdrawals?success=Withdrawal approved');
@@ -156,11 +156,11 @@ router.post('/withdrawals/:id/decline', isAdmin, async (req, res) => {
             return res.redirect('/admin/withdrawals?error=Transaction not found');
         }
 
-        if (transaction.status === 'Declined') {
+        if (transaction.status === 'declined') {
             return res.redirect('/admin/withdrawals?error=Already declined');
         }
 
-        transaction.status = 'Declined';
+        transaction.status = 'declined';
         await user.save();
 
         res.redirect('/admin/withdrawals?success=Withdrawal declined');
