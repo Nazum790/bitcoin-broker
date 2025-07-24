@@ -14,45 +14,47 @@
             </tr>
         </thead>
 
+        <tbody>
+            <% withdrawals.forEach(w=> { %>
+                <tr>
+                    <td>
+                        <%= w.username %>
+                    </td>
+                    <td>
+                        <%= w.email %>
+                    </td>
+                    <td>
+                        <%= new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2
+                            }).format(w.amount || 0) %>
+                    </td>
+                    <td>
+                        <%= w.currency || 'N/A' %>
+                    </td>
+                    <td>
+                        <%= w.status || 'Pending' %>
+                    </td>
+                    <td>
+                        <%= w.date ? new Date(w.date).toLocaleString() : 'N/A' %>
+                    </td>
+                    <td>
+                        <% if ((w.status || 'Pending' ).toLowerCase()==='pending' ) { %>
+                            <form action="/admin/withdrawals/<%= w._id %>/approve" method="POST"
+                                style="display:inline;">
+                                <button type="submit" style="background-color: green; color: white;">Approve</button>
+                            </form>
+                            <form action="/admin/withdrawals/<%= w._id %>/decline" method="POST"
+                                style="display:inline;">
+                                <button type="submit" style="background-color: red; color: white;">Decline</button>
+                            </form>
+                            <% } else { %>
+                                <%= w.status %>
+                                    <% } %>
+                    </td>
+                </tr>
+                <% }) %>
+        </tbody>
     </table>
 </div>
-<tbody>
-    <% withdrawals.forEach(w=> { %>
-        <tr>
-            <td>
-                <%= w.username %>
-            </td>
-            <td>
-                <%= w.email %>
-            </td>
-            <td>
-                <%= w.currency || '' %>
-                    <%= new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2
-                        }).format(w.amount || 0) %>
-            </td>
-            <td>
-                <%= w.currency || 'N/A' %>
-            </td>
-            <td>
-                <%= w.status || 'Pending' %>
-            </td>
-            <td>
-                <%= w.date ? new Date(w.date).toLocaleString() : 'N/A' %>
-            </td>
-            <td>
-                <% if ((w.status || 'Pending' ).toLowerCase()==='pending' ) { %>
-                    <form action="/admin/withdrawals/<%= w._id %>/approve" method="POST" style="display:inline;">
-                        <button type="submit">Approve</button>
-                    </form>
-                    <form action="/admin/withdrawals/<%= w._id %>/decline" method="POST" style="display:inline;">
-                        <button type="submit">Decline</button>
-                    </form>
-                    <% } else { %>
-                        <%= w.status %>
-                            <% } %>
-            </td>
-        </tr>
-        <% }) %>
-</tbody>
+
 <br>
 <a href="/admin/dashboard">← Back to Dashboard</a>

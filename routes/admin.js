@@ -85,6 +85,7 @@ router.get('/withdrawals', isAdmin, async (req, res) => {
             user.transactions.forEach(tx => {
                 if (tx.type === 'withdrawal') {
                     allWithdrawals.push({
+                        _id: tx._id,
                         username: user.username,
                         email: user.email,
                         currency: user.currency,
