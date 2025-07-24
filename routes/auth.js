@@ -4,6 +4,11 @@ const bcrypt = require('bcryptjs');
 const { body, validationResult } = require('express-validator');
 const User = require('../models/user');
 
+// ✅ ROOT: Show homepage (home.ejs)
+router.get('/', (req, res) => {
+    res.render('home');
+});
+
 // GET registration page
 router.get('/register', (req, res) => {
     res.render('auth/register', { error: '', email: '', username: '' });
@@ -49,7 +54,7 @@ router.post(
                 password: hashedPassword,
                 isAdmin: false,
                 balance: 0,
-                currency, // Use selected currency
+                currency,
                 transactions: []
             });
 
