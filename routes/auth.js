@@ -1,3 +1,5 @@
+// routes/auth.js
+
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
@@ -89,7 +91,7 @@ router.get('/login', (req, res) => {
 });
 
 // ===============================
-// Handle Login for Users and Admins
+// Handle Login (Users Only)
 // ===============================
 router.post(
     '/login',
@@ -119,9 +121,13 @@ router.post(
                 return res.redirect(`/login?error=${msg}&email=${encodeURIComponent(email)}`);
             }
 
-            // ===============================
-            // ✅ Store user in session
-            // ===============================
+            // ❌ Reject admins trying to log in from user login page
+            if (user.isAdmin === true) {
+                const msg = encodeURIComponent('Admins must log in from the admin panel');
+                return res.redirect(`/login?error=${msg}&email=${encodeURIComponent(email)}`);
+            }
+
+            // ✅ Store user session
             req.session.user = {
                 id: user._id,
                 username: user.username,
@@ -132,14 +138,7 @@ router.post(
                 isAdmin: user.isAdmin
             };
 
-            // ✅ Redirect based on role
-            if (user.isAdmin) {
-                req.session.admin = req.session.user;
-                return res.redirect('/admin/dashboard');
-            } else {
-                return res.redirect('/dashboard');
-            }
-
+            return res.redirect('/dashboard');
         } catch (err) {
             console.error('Login error:', err);
             const errMsg = encodeURIComponent('Login failed');

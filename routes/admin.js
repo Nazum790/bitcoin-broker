@@ -6,10 +6,8 @@ const { body, validationResult } = require('express-validator');
 
 // Middleware to protect admin routes
 function isAdmin(req, res, next) {
-    if (req.session && req.session.admin) {
-        return next();
-    }
-    res.redirect('/admin/login');
+    if (req.session && req.session.admin) return next();
+    return res.redirect('/admin/login');
 }
 
 // Redirect /admin to /admin/login
@@ -34,7 +32,7 @@ router.post('/login',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.redirect(`/admin/login ? error = ${encodeURIComponent(msg)}`);
+            return res.redirect(`/admin/login?error=${encodeURIComponent(msg)}`);
         }
 
         const { email, password } = req.body;
@@ -55,11 +53,11 @@ router.post('/login',
                 email: admin.email
             };
 
-            res.redirect('/admin/dashboard');
+            return res.redirect('/admin/dashboard');
 
         } catch (err) {
             console.error('Admin login error:', err);
-            res.redirect('/admin/login?error=Server error');
+            return res.redirect('/admin/login?error=Server error');
         }
     }
 );
@@ -132,7 +130,7 @@ router.post('/withdrawals/:id/approve', isAdmin, async (req, res) => {
         transaction.status = 'approved';
         await user.save();
 
-        res.redirect('/admin/withdrawals?success=Withdrawal approved');
+        return res.redirect('/admin/withdrawals?success=Withdrawal approved');
     } catch (err) {
         console.error('Approve error:', err);
         res.redirect('/admin/withdrawals?error=Failed to approve withdrawal');
@@ -163,7 +161,7 @@ router.post('/withdrawals/:id/decline', isAdmin, async (req, res) => {
         transaction.status = 'declined';
         await user.save();
 
-        res.redirect('/admin/withdrawals?success=Withdrawal declined');
+        return res.redirect('/admin/withdrawals?success=Withdrawal declined');
     } catch (err) {
         console.error('Decline error:', err);
         res.redirect('/admin/withdrawals?error=Failed to decline withdrawal');
@@ -189,7 +187,7 @@ router.post('/update-balance',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.redirect(`/admin/dashboard ? error = ${encodeURIComponent(msg)}`);
+            return res.redirect(`/admin/dashboard?error=${encodeURIComponent(msg)}`);
         }
 
         const { userId, newBalance } = req.body;
@@ -198,7 +196,7 @@ router.post('/update-balance',
             await User.findByIdAndUpdate(userId, {
                 balance: parseFloat(newBalance)
             });
-            res.redirect('/admin/dashboard?success=Balance updated');
+            return res.redirect('/admin/dashboard?success=Balance updated');
         } catch (err) {
             console.error('Balance update error:', err);
             res.redirect('/admin/dashboard?error=Failed to update balance');
