@@ -34,7 +34,7 @@ router.post('/login',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.redirect(`/admin/login?error=${encodeURIComponent(msg)}`);
+            return res.redirect(`/admin/login ? error = ${encodeURIComponent(msg)}`);
         }
 
         const { email, password } = req.body;
@@ -89,7 +89,7 @@ router.get('/withdrawals', isAdmin, async (req, res) => {
                         username: user.username,
                         email: user.email,
                         currency: user.currency,
-                        amount: tx.amount, // ✅ Show amount
+                        amount: tx.amount,
                         status: tx.status,
                         date: tx.date,
                         pixKey: tx.pixKey
@@ -125,11 +125,11 @@ router.post('/withdrawals/:id/approve', isAdmin, async (req, res) => {
             return res.redirect('/admin/withdrawals?error=Transaction not found');
         }
 
-        if (transaction.status === 'approved') {
+        if (transaction.status === 'Approved') {
             return res.redirect('/admin/withdrawals?error=Already approved');
         }
 
-        transaction.status = 'approved';
+        transaction.status = 'Approved';
         await user.save();
 
         res.redirect('/admin/withdrawals?success=Withdrawal approved');
@@ -156,11 +156,11 @@ router.post('/withdrawals/:id/decline', isAdmin, async (req, res) => {
             return res.redirect('/admin/withdrawals?error=Transaction not found');
         }
 
-        if (transaction.status === 'declined') {
+        if (transaction.status === 'Declined') {
             return res.redirect('/admin/withdrawals?error=Already declined');
         }
 
-        transaction.status = 'declined';
+        transaction.status = 'Declined';
         await user.save();
 
         res.redirect('/admin/withdrawals?success=Withdrawal declined');
@@ -189,7 +189,7 @@ router.post('/update-balance',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.redirect(`/admin/dashboard?error=${encodeURIComponent(msg)}`);
+            return res.redirect(`/admin/dashboard ? error = ${encodeURIComponent(msg)}`);
         }
 
         const { userId, newBalance } = req.body;
