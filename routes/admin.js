@@ -103,6 +103,55 @@ router.get('/withdrawals', isAdmin, async (req, res) => {
         res.redirect('/admin/dashboard?error=Failed to load withdrawals');
     }
 });
+// POST approve withdrawal
+router.post('/withdrawals/:id/approve', isAdmin, async (req, res) => {
+    try {
+        const withdrawalId = req.params.id;
+        const users = await User.find({ 'transactions._id': withdrawalId });
+
+        if (!users.length) {
+            return res.redirect('/admin/withdrawals?error=Withdrawal not found');
+        }
+
+        const user = users[0];
+        const transaction = user.transactions.id(withdrawalId);
+
+        if (transaction && transaction.status === 'Pending') {
+            transaction.status = 'Approved';
+            await user.save();
+        }
+
+        res.redirect('/admin/withdrawals?success=Withdrawal approved');
+    } catch (err) {
+        console.error('Approve error:', err);
+        res.redirect('/admin/withdrawals?error=Failed to approve withdrawal');
+    }
+});
+
+// POST decline withdrawal
+router.post('/withdrawals/:id/decline', isAdmin, async (req, res) => {
+    try {
+        const withdrawalId = req.params.id;
+        const users = await User.find({ 'transactions._id': withdrawalId });
+
+        if (!users.length) {
+            return res.redirect('/admin/withdrawals?error=Withdrawal not found');
+        }
+
+        const user = users[0];
+        const transaction = user.transactions.id(withdrawalId);
+
+        if (transaction && transaction.status === 'Pending') {
+            transaction.status = 'Declined';
+            await user.save();
+        }
+
+        res.redirect('/admin/withdrawals?success=Withdrawal declined');
+    } catch (err) {
+        console.error('Decline error:', err);
+        res.redirect('/admin/withdrawals?error=Failed to decline withdrawal');
+    }
+});
 
 // Admin logout
 router.get('/logout', (req, res) => {
