@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const { Types } = require('mongoose'); // ✅ Required for generating transaction IDs
 
 // Middleware to check if user is logged in
 const requireAuth = (req, res, next) => {
@@ -78,14 +79,15 @@ router.post('/withdraw', requireAuth, async (req, res) => {
             return res.redirect('/withdraw?error=Insufficient balance');
         }
 
-        // Deduct and record transaction with currency included
+        // Deduct and record transaction with unique _id and proper status
         user.balance -= numericAmount;
 
         user.transactions.unshift({
+            _id: new Types.ObjectId(), // ✅ This fixes the missing _id issue
             type: 'withdrawal',
             amount: numericAmount,
-            currency: user.currency, // ✅ Include currency per transaction
-            status: 'pending',
+            currency: user.currency,
+            status: 'Pending', // ✅ Use capital P to match admin panel
             date: new Date(),
             pixKey: pixKey
         });

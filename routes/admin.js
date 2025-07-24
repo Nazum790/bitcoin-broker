@@ -34,7 +34,7 @@ router.post('/login',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.redirect(`/admin/login ? error = ${encodeURIComponent(msg)}`);
+            return res.redirect(`/admin/login?error=${encodeURIComponent(msg)}`);
         }
 
         const { email, password } = req.body;
@@ -89,7 +89,10 @@ router.get('/withdrawals', isAdmin, async (req, res) => {
                         username: user.username,
                         email: user.email,
                         currency: user.currency,
-                        ...tx
+                        amount: tx.amount, // ✅ Show amount
+                        status: tx.status,
+                        date: tx.date,
+                        pixKey: tx.pixKey
                     });
                 }
             });
@@ -104,6 +107,7 @@ router.get('/withdrawals', isAdmin, async (req, res) => {
         res.redirect('/admin/dashboard?error=Failed to load withdrawals');
     }
 });
+
 // POST approve withdrawal
 router.post('/withdrawals/:id/approve', isAdmin, async (req, res) => {
     try {
@@ -117,10 +121,16 @@ router.post('/withdrawals/:id/approve', isAdmin, async (req, res) => {
         const user = users[0];
         const transaction = user.transactions.id(withdrawalId);
 
-        if (transaction && transaction.status === 'Pending') {
-            transaction.status = 'Approved';
-            await user.save();
+        if (!transaction) {
+            return res.redirect('/admin/withdrawals?error=Transaction not found');
         }
+
+        if (transaction.status === 'approved') {
+            return res.redirect('/admin/withdrawals?error=Already approved');
+        }
+
+        transaction.status = 'approved';
+        await user.save();
 
         res.redirect('/admin/withdrawals?success=Withdrawal approved');
     } catch (err) {
@@ -142,10 +152,16 @@ router.post('/withdrawals/:id/decline', isAdmin, async (req, res) => {
         const user = users[0];
         const transaction = user.transactions.id(withdrawalId);
 
-        if (transaction && transaction.status === 'Pending') {
-            transaction.status = 'Declined';
-            await user.save();
+        if (!transaction) {
+            return res.redirect('/admin/withdrawals?error=Transaction not found');
         }
+
+        if (transaction.status === 'declined') {
+            return res.redirect('/admin/withdrawals?error=Already declined');
+        }
+
+        transaction.status = 'declined';
+        await user.save();
 
         res.redirect('/admin/withdrawals?success=Withdrawal declined');
     } catch (err) {
@@ -173,7 +189,7 @@ router.post('/update-balance',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.redirect(`/admin/dashboard ? error = ${encodeURIComponent(msg)}`);
+            return res.redirect(`/admin/dashboard?error=${encodeURIComponent(msg)}`);
         }
 
         const { userId, newBalance } = req.body;
