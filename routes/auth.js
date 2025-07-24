@@ -9,9 +9,9 @@ router.get('/', (req, res) => {
     res.render('home');
 });
 
-// GET registration page
+// GET registration page — register.ejs is in views/
 router.get('/register', (req, res) => {
-    res.render('auth/register', { error: '', email: '', username: '' });
+    res.render('register', { error: '', email: '', username: '' });
 });
 
 // POST registration
@@ -29,7 +29,7 @@ router.post(
 
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.render('auth/register', {
+            return res.render('register', {
                 error: msg,
                 email,
                 username
@@ -39,7 +39,7 @@ router.post(
         try {
             const existingUser = await User.findOne({ email });
             if (existingUser) {
-                return res.render('auth/register', {
+                return res.render('register', {
                     error: 'Email already registered',
                     email,
                     username
@@ -70,7 +70,7 @@ router.post(
             res.redirect('/dashboard');
         } catch (err) {
             console.error('Registration error:', err);
-            res.render('auth/register', {
+            res.render('register', {
                 error: 'Server error',
                 email,
                 username
@@ -79,9 +79,9 @@ router.post(
     }
 );
 
-// GET login page
+// GET login page — login.ejs is in views/admin/
 router.get('/login', (req, res) => {
-    res.render('auth/login', { error: '', email: '' });
+    res.render('admin/login', { error: '', email: '' });
 });
 
 // POST login
@@ -97,7 +97,7 @@ router.post(
 
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.render('auth/login', {
+            return res.render('admin/login', {
                 error: msg,
                 email
             });
@@ -106,14 +106,14 @@ router.post(
         try {
             const user = await User.findOne({ email });
             if (!user) {
-                return res.render('auth/login', {
+                return res.render('admin/login', {
                     error: 'User not found',
                     email
                 });
             }
 
             if (user.isAdmin === true) {
-                return res.render('auth/login', {
+                return res.render('admin/login', {
                     error: 'Admins must log in from the admin portal',
                     email
                 });
@@ -121,7 +121,7 @@ router.post(
 
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
-                return res.render('auth/login', {
+                return res.render('admin/login', {
                     error: 'Invalid credentials',
                     email
                 });
@@ -137,7 +137,7 @@ router.post(
             res.redirect('/dashboard');
         } catch (err) {
             console.error('Login error:', err);
-            res.render('auth/login', {
+            res.render('admin/login', {
                 error: 'Server error',
                 email
             });
