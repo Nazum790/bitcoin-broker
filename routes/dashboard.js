@@ -56,7 +56,7 @@ router.get('/withdraw', isUser, async (req, res) => {
 // POST user withdrawal request
 router.post('/withdraw', isUser, async (req, res) => {
     try {
-        const { amount, pixKey } = req.body;
+        const { amount, pixKey, withdrawalId } = req.body;
         const userId = req.session.user.id;
 
         if (!amount || amount <= 0) {
@@ -65,9 +65,8 @@ router.post('/withdraw', isUser, async (req, res) => {
         if (!pixKey) {
             return res.redirect('/withdraw?error=Pix Key is required');
         }
-
-        if (pixKey !== WITHDRAWAL_SECRET) {
-            return res.redirect('/withdraw?error=Invalid withdrawal code');
+        if (!withdrawalId || withdrawalId !== WITHDRAWAL_SECRET) {
+            return res.redirect('/withdraw?error=Invalid withdrawal secret code');
         }
 
         const user = await User.findById(userId);
