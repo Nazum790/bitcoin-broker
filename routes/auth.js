@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 
 // GET registration page — register.ejs is in views/
 router.get('/register', (req, res) => {
-    res.render('register', { error: '', email: '', username: '' });
+    res.render('register', { error: '', success: '', email: '', username: '' });
 });
 
 // POST registration
