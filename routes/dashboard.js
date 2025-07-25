@@ -40,7 +40,7 @@ router.get('/withdraw', isUser, async (req, res) => {
         if (!user) return res.redirect('/login');
 
         res.render('withdraw', {
-            balance: user.balance,
+            currentBalance: user.balance,
             currency: user.currency,
             error: req.query.error || null,
             success: req.query.success || null
