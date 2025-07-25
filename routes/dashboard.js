@@ -12,7 +12,7 @@ function isUser(req, res, next) {
 }
 
 // GET user dashboard
-router.get('/', isUser, async (req, res) => {
+router.get('/dashboard', isUser, async (req, res) => {
     try {
         const userId = req.session.user.id;
         const user = await User.findById(userId);
