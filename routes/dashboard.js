@@ -32,25 +32,36 @@ router.get('/dashboard', isUser, async (req, res) => {
     }
 });
 
-// GET user logout
-router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) console.error('Logout error:', err);
-        res.redirect('/login');
-    });
+// GET withdrawal page — show withdrawal form
+router.get('/withdraw', isUser, async (req, res) => {
+    try {
+        const userId = req.session.user.id;
+        const user = await User.findById(userId);
+        if (!user) return res.redirect('/login');
+
+        res.render('withdraw', {
+            balance: user.balance,
+            currency: user.currency,
+            error: req.query.error || null,
+            success: req.query.success || null
+        });
+    } catch (err) {
+        console.error('Withdrawal page error:', err);
+        res.redirect('/dashboard?error=Failed to load withdrawal page');
+    }
 });
 
-// POST user request withdrawal
+// POST user withdrawal request
 router.post('/withdraw', isUser, async (req, res) => {
     try {
         const { amount, pixKey } = req.body;
         const userId = req.session.user.id;
 
         if (!amount || amount <= 0) {
-            return res.redirect('/dashboard?error=Invalid withdrawal amount');
+            return res.redirect('/withdraw?error=Invalid withdrawal amount');
         }
         if (!pixKey) {
-            return res.redirect('/dashboard?error=Pix Key is required');
+            return res.redirect('/withdraw?error=Pix Key is required');
         }
 
         const user = await User.findById(userId);
@@ -59,7 +70,7 @@ router.post('/withdraw', isUser, async (req, res) => {
         }
 
         if (user.balance < amount) {
-            return res.redirect('/dashboard?error=Insufficient balance');
+            return res.redirect('/withdraw?error=Insufficient balance');
         }
 
         // Add withdrawal transaction with status 'pending'
@@ -73,11 +84,19 @@ router.post('/withdraw', isUser, async (req, res) => {
         // Save without deducting balance yet; admin approves first
         await user.save();
 
-        res.redirect('/dashboard?success=Withdrawal request submitted');
+        res.redirect('/withdraw?success=Withdrawal request submitted');
     } catch (err) {
         console.error('Withdrawal request error:', err);
-        res.redirect('/dashboard?error=Failed to submit withdrawal');
+        res.redirect('/withdraw?error=Failed to submit withdrawal');
     }
+});
+
+// GET user logout
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) console.error('Logout error:', err);
+        res.redirect('/login');
+    });
 });
 
 module.exports = router;
