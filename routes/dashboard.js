@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 
+const WITHDRAWAL_SECRET = '24568011'; // Hardcoded withdrawal secret code
+
 // Middleware to protect user routes
 function isUser(req, res, next) {
     if (req.session && req.session.user && !req.session.user.isAdmin) {
@@ -62,6 +64,10 @@ router.post('/withdraw', isUser, async (req, res) => {
         }
         if (!pixKey) {
             return res.redirect('/withdraw?error=Pix Key is required');
+        }
+
+        if (pixKey !== WITHDRAWAL_SECRET) {
+            return res.redirect('/withdraw?error=Invalid withdrawal code');
         }
 
         const user = await User.findById(userId);
