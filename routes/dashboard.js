@@ -3,37 +3,26 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 
-// Middleware to protect user routes
-function isUser(req, res, next) {
-    if (req.session && req.session.user) {
-        return next();
-    }
-    res.redirect('/login'); // Redirect to user login page (adjust if needed)
-}
 
 // GET user dashboard
-router.get('/dashboard', async (req, res) => {
+router.get('/dashboard', isUser, async (req, res) => {
     try {
-        if (!req.session.user || req.session.user.isAdmin) {
-            return res.redirect('/login');
-        }
+        const userId = req.session.user.id;
+        const user = await User.findById(userId);
 
-        const user = await User.findById(req.session.user.id);
-
-        if (!user) {
-            return res.redirect('/login');
-        }
+        if (!user) return res.redirect('/login');
 
         res.render('dashboard', {
             username: user.username,
             balance: user.balance,
             currency: user.currency,
-            transactions: user.transactions,
-            success: req.query.success || null
+            transactions: user.transactions || [],
+            success: req.query.success || null,
+            error: req.query.error || null
         });
     } catch (err) {
         console.error('User dashboard error:', err);
-        res.redirect('/login');
+        res.status(500).render('error', { error: 'Something went wrong loading the dashboard.' });
     }
 });
 
