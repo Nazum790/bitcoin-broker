@@ -12,14 +12,25 @@ function isUser(req, res, next) {
 }
 
 // GET user dashboard
-router.get('/dashboard', isUser, async (req, res) => {
+router.get('/dashboard', async (req, res) => {
     try {
-        const userId = req.session.user.id;
-        const user = await User.findById(userId);
+        if (!req.session.user || req.session.user.isAdmin) {
+            return res.redirect('/login');
+        }
+
+        const user = await User.findById(req.session.user.id);
+
         if (!user) {
             return res.redirect('/login');
         }
-        res.render('dashboard', { user });
+
+        res.render('dashboard', {
+            username: user.username,
+            balance: user.balance,
+            currency: user.currency,
+            transactions: user.transactions,
+            success: req.query.success || null
+        });
     } catch (err) {
         console.error('User dashboard error:', err);
         res.redirect('/login');
