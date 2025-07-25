@@ -1,8 +1,14 @@
-// routes/dashboard.js
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 
+// Middleware to protect user routes
+function isUser(req, res, next) {
+    if (req.session && req.session.user && !req.session.user.isAdmin) {
+        return next();
+    }
+    res.redirect('/login');
+}
 
 // GET user dashboard
 router.get('/dashboard', isUser, async (req, res) => {
@@ -41,10 +47,10 @@ router.post('/withdraw', isUser, async (req, res) => {
         const userId = req.session.user.id;
 
         if (!amount || amount <= 0) {
-            return res.redirect('/?error=Invalid withdrawal amount');
+            return res.redirect('/dashboard?error=Invalid withdrawal amount');
         }
         if (!pixKey) {
-            return res.redirect('/?error=Pix Key is required');
+            return res.redirect('/dashboard?error=Pix Key is required');
         }
 
         const user = await User.findById(userId);
@@ -53,7 +59,7 @@ router.post('/withdraw', isUser, async (req, res) => {
         }
 
         if (user.balance < amount) {
-            return res.redirect('/?error=Insufficient balance');
+            return res.redirect('/dashboard?error=Insufficient balance');
         }
 
         // Add withdrawal transaction with status 'pending'
@@ -64,15 +70,13 @@ router.post('/withdraw', isUser, async (req, res) => {
             pixKey
         });
 
-        // Deduct balance immediately or after approval? (choose your logic)
-        // Here I do NOT deduct balance until admin approves, safer for now
-
+        // Save without deducting balance yet; admin approves first
         await user.save();
 
-        res.redirect('/?success=Withdrawal request submitted');
+        res.redirect('/dashboard?success=Withdrawal request submitted');
     } catch (err) {
         console.error('Withdrawal request error:', err);
-        res.redirect('/?error=Failed to submit withdrawal');
+        res.redirect('/dashboard?error=Failed to submit withdrawal');
     }
 });
 
