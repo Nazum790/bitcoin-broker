@@ -21,6 +21,12 @@ router.post(
         body('username').notEmpty().withMessage('Username is required'),
         body('email').isEmail().withMessage('Valid email is required'),
         body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+        body('confirmPassword').custom((value, { req }) => {
+            if (value !== req.body.password) {
+                throw new Error('Passwords do not match');
+            }
+            return true;
+        }),
         body('currency').notEmpty().withMessage('Currency is required')
     ],
     async (req, res) => {
@@ -79,9 +85,9 @@ router.post(
     }
 );
 
-// GET login page — login.ejs is in views/admin/
+// GET login page — login.ejs is now in views/
 router.get('/login', (req, res) => {
-    res.render('admin/login', { error: '', email: '' });
+    res.render('login', { error: '', email: '' });
 });
 
 // POST login
@@ -97,7 +103,7 @@ router.post(
 
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.render('admin/login', {
+            return res.render('login', {
                 error: msg,
                 email
             });
@@ -106,14 +112,14 @@ router.post(
         try {
             const user = await User.findOne({ email });
             if (!user) {
-                return res.render('admin/login', {
+                return res.render('login', {
                     error: 'User not found',
                     email
                 });
             }
 
             if (user.isAdmin === true) {
-                return res.render('admin/login', {
+                return res.render('login', {
                     error: 'Admins must log in from the admin portal',
                     email
                 });
@@ -121,7 +127,7 @@ router.post(
 
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
-                return res.render('admin/login', {
+                return res.render('login', {
                     error: 'Invalid credentials',
                     email
                 });
@@ -137,7 +143,7 @@ router.post(
             res.redirect('/dashboard');
         } catch (err) {
             console.error('Login error:', err);
-            res.render('admin/login', {
+            res.render('login', {
                 error: 'Server error',
                 email
             });
