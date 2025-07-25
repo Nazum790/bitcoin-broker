@@ -62,7 +62,7 @@ router.post('/login',
     }
 );
 
-// GET admin dashboard
+// GET admin dashboard - list all normal users
 router.get('/dashboard', isAdmin, async (req, res) => {
     try {
         const users = await User.find({ isAdmin: false }).sort({ createdAt: -1 });
@@ -73,7 +73,7 @@ router.get('/dashboard', isAdmin, async (req, res) => {
     }
 });
 
-// GET withdrawals
+// GET withdrawals list for admin
 router.get('/withdrawals', isAdmin, async (req, res) => {
     try {
         const users = await User.find({ 'transactions.0': { $exists: true } });
@@ -168,15 +168,7 @@ router.post('/withdrawals/:id/decline', isAdmin, async (req, res) => {
     }
 });
 
-// Admin logout
-router.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) console.error('Admin logout error:', err);
-        res.redirect('/admin/login');
-    });
-});
-
-// POST update balance
+// POST update user balance
 router.post('/update-balance',
     isAdmin,
     [
@@ -187,7 +179,7 @@ router.post('/update-balance',
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.redirect(`/admin/dashboard?error=${encodeURIComponent(msg)}`);
+            return res.redirect(`/admin/dashboard ? error = ${encodeURIComponent(msg)}`);
         }
 
         const { userId, newBalance } = req.body;
@@ -203,5 +195,13 @@ router.post('/update-balance',
         }
     }
 );
+
+// Admin logout
+router.get('/logout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) console.error('Admin logout error:', err);
+        res.redirect('/admin/login');
+    });
+});
 
 module.exports = router;
