@@ -9,12 +9,23 @@ router.get('/', (req, res) => {
     res.render('home');
 });
 
-// GET registration page — register.ejs is in views/
+// ✅ GET registration page
 router.get('/register', (req, res) => {
-    res.render('register', { error: '', success: '', email: '', username: '' });
+    const success = req.session.success || '';
+    const error = req.session.error || '';
+    const email = req.session.email || '';
+    const username = req.session.username || '';
+
+    // clear session flash messages
+    req.session.success = '';
+    req.session.error = '';
+    req.session.email = '';
+    req.session.username = '';
+
+    res.render('register', { success, error, email, username });
 });
 
-// POST registration
+// ✅ POST registration
 router.post(
     '/register',
     [
@@ -35,21 +46,19 @@ router.post(
 
         if (!errors.isEmpty()) {
             const msg = errors.array()[0].msg;
-            return res.render('register', {
-                error: msg,
-                email,
-                username
-            });
+            req.session.error = msg;
+            req.session.email = email;
+            req.session.username = username;
+            return res.redirect('/register');
         }
 
         try {
             const existingUser = await User.findOne({ email });
             if (existingUser) {
-                return res.render('register', {
-                    error: 'Email already registered',
-                    email,
-                    username
-                });
+                req.session.error = 'Email already registered';
+                req.session.email = email;
+                req.session.username = username;
+                return res.redirect('/register');
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -66,31 +75,24 @@ router.post(
 
             await newUser.save();
 
-            req.session.user = {
-                id: newUser._id,
-                username: newUser.username,
-                email: newUser.email,
-                isAdmin: false
-            };
-
-            res.redirect('/dashboard');
+            req.session.success = 'Registration successful. ';
+            return res.redirect('/register');
         } catch (err) {
             console.error('Registration error:', err);
-            res.render('register', {
-                error: 'Server error',
-                email,
-                username
-            });
+            req.session.error = 'Server error';
+            req.session.email = email;
+            req.session.username = username;
+            return res.redirect('/register');
         }
     }
 );
 
-// GET login page — login.ejs is now in views/
+// ✅ GET login page
 router.get('/login', (req, res) => {
     res.render('login', { error: '', email: '' });
 });
 
-// POST login
+// ✅ POST login
 router.post(
     '/login',
     [
@@ -151,7 +153,7 @@ router.post(
     }
 );
 
-// GET logout
+// ✅ GET logout
 router.get('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
